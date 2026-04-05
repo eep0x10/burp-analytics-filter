@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Burp Suite
+*.burp
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Capturas / evidências (não commitar dados de engajamento)
+docs/*.png
+docs/*.jpg
+docs/*.gif
+!docs/.gitkeep
