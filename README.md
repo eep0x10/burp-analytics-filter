@@ -1,12 +1,24 @@
-![Burp Analytics Filter — Menos ruído. Mais contexto no histórico.](docs/assets/banner.svg)
+<div align="center">
+
+<img src="docs/assets/banner.png" alt="Burp Analytics Filter — ilustração de marca" width="100%">
 
 # Burp Analytics Filter
 
-**Menos ruído. Mais contexto no histórico.**
+### Menos ruído. Mais contexto.
+
+Extensão para marcar requisições de analytics, telemetria e connectivity checks no Proxy History. A marcação permite filtrar visualmente o histórico durante análises autorizadas, sem bloquear o tráfego.
+
+[![Extensão: Jython](https://img.shields.io/badge/Extens%C3%A3o-Jython-34495e?style=flat-square)](analytics_filter.py) [![Licença: MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-34495e?style=flat-square)](LICENSE)
 
 [Instalação](#instalação) · [Uso](#uso) · [Como validar](#como-validar) · [Código e licença](#código-e-licença)
 
-Extensão para marcar requisições de analytics, telemetria e connectivity checks no Proxy History. A marcação permite filtrar visualmente o histórico durante análises autorizadas, sem bloquear o tráfego.
+</div>
+
+> O banner é uma ilustração conceitual de marca criada com IA; não é uma captura da aplicação nem comprovação de um resultado real.
+
+| Identifique | Marque | Concentre |
+| :--- | :--- | :--- |
+| Compare URLs com os padrões de telemetria. | Aplique destaque cinza e comentário analytics. | Use o filtro visual do histórico sem bloquear tráfego. |
 
 ## Instalação
 
