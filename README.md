@@ -1,74 +1,40 @@
-# Burp Suite Analytics Filter
+![Burp Analytics Filter — Menos ruído. Mais contexto no histórico.](docs/assets/banner.svg)
 
-Extensão Burp Suite (Jython) que detecta e marca automaticamente chamadas de analytics, telemetria e connectivity checks no Proxy History — eliminando o ruído de SDKs de terceiros durante pentests mobile e web.
+# Burp Analytics Filter
 
-## Como funciona
+**Menos ruído. Mais contexto no histórico.**
 
-A extensão registra um `IProxyListener` e, para cada requisição que passar pelo proxy, verifica a URL contra uma lista de regex. Se bater, a requisição recebe:
+[Instalação](#instalação) · [Uso](#uso) · [Como validar](#como-validar) · [Código e licença](#código-e-licença)
 
-- **Highlight:** cinza (`gray`)
-- **Comment:** `analytics`
-
-No Proxy History, basta filtrar por `Color = gray` para esconder todo o ruído automaticamente.
+Extensão para marcar requisições de analytics, telemetria e connectivity checks no Proxy History. A marcação permite filtrar visualmente o histórico durante análises autorizadas, sem bloquear o tráfego.
 
 ## Instalação
 
-1. Burp Suite → **Extender → Extensions → Add**
-2. Extension Type: **Python**
-3. Selecionar o arquivo `analytics_filter.py`
-4. Confirmar que a aba **"Analytics Filter"** apareceu na barra superior
+Requer Burp Suite com suporte a extensões Python/Jython e o JAR standalone do Jython configurado no ambiente de extensões.
 
-> **Requisito:** Jython standalone JAR configurado em Extender → Options → Python Environment.
+1. Clone o repositório ou obtenha [analytics_filter.py](analytics_filter.py).
+2. No gerenciador de extensões do Burp, adicione uma extensão do tipo **Python**.
+3. Selecione o arquivo e confirme a abertura da aba **Analytics Filter**.
+
+Os nomes dos menus variam entre versões do Burp. Esta extensão usa a API clássica `IProxyListener`, não a API Montoya.
 
 ## Uso
 
-Após carregar a extensão:
+Requisições que correspondem aos padrões recebem destaque **cinza** e comentário **analytics**. Configure o filtro de cor do Proxy History para ocultá-las quando desejar. A aba da extensão permite editar os padrões e aplicá-los durante a sessão.
 
-1. **No Proxy History:** clique no ícone de filtro → marque **"Hide items with color"** → selecione **Gray**
-2. Todo tráfego de analytics/telemetria some da view
-3. A aba **Analytics Filter** exibe o contador de requisições ocultadas e permite editar os padrões em runtime (botão "Aplicar padrões")
+| Configuração | Persistência |
+| --- | --- |
+| Editar e aplicar na aba | Sessão atual. |
+| Alterar `DEFAULT_PATTERNS` no código | Próximas cargas da extensão. |
 
-![Analytics Filter tab](docs/tab-screenshot.png)
+As expressões são compiladas com `re.IGNORECASE` e comparadas com `re.search` na URL. Os padrões cobrem serviços de analytics, monitoramento, marketing e caminhos genéricos de telemetria.
 
-## Padrões incluídos por padrão
+## Como validar
 
-| Categoria | Exemplos |
-|-----------|---------|
-| Connectivity checks | `connectivitycheck.gstatic.com`, `www.google.com/gen_204`, `/generate_204` |
-| Google Analytics / Firebase | `google-analytics.com`, `firebaselogging`, `app-measurement.com` |
-| Meta / Facebook | `connect.facebook.net`, `facebook.com/tr` |
-| Amplitude / Mixpanel / Segment | `amplitude.com`, `mixpanel.com`, `api.segment.io` |
-| AppsFlyer / Adjust / Branch | `appsflyer.com`, `adjust.com`, `branch.io` |
-| Sentry / Bugsnag / New Relic | `sentry.io`, `bugsnag.com`, `nr-data.net` |
-| Datadog / Dynatrace | `datadoghq.com`, `live.dynatrace.com` |
-| Marketing Cloud (Salesforce) | `marketingcloudapis.com`, `exacttarget.com` |
-| Braze / Hotjar / FullStory | `braze.com`, `hotjar.com`, `fullstory.com` |
-| Paths genéricos | `/telemetry/`, `/beacon/`, `/pixel/`, `/tracking/` |
+Em um projeto de teste, envie uma URL que corresponda a um padrão e outra que não corresponda. Verifique destaque e comentário, aplique um novo padrão e repita. Confirme que o tráfego continua presente ao remover o filtro visual.
 
-## Adicionando padrões personalizados
+Não há suíte automatizada incluída. Padrões amplos podem classificar tráfego relevante incorretamente; a marcação não comprova que uma requisição é inofensiva. A extensão pode substituir destaque/comentário existentes nos itens correspondentes.
 
-**Runtime (sem reiniciar):**
-- Aba Analytics Filter → editar a caixa de texto → clicar **"Aplicar padrões"**
+## Código e licença
 
-**Permanente:**
-- Editar a lista `DEFAULT_PATTERNS` em `analytics_filter.py` antes de carregar a extensão
-
-Os padrões são regex Python (case-insensitive, `re.search` na URL completa).
-
-## Contexto de uso — pentest mobile
-
-Durante pentests mobile o histórico do Burp enche de ruído de SDKs:
-
-```
-8672  connectivitycheck.gstatic.com  GET  /generate_204  → analytics (gray)
-8671  www.google.com                 GET  /gen_204        → analytics (gray)
-8670  firebaselogging.googleapis.com POST /v1/...         → analytics (gray)
-8669  appsflyer.com                  POST /inappevent     → analytics (gray)
-8510  api.target-app.com             POST /auth/login     → ALVO ← fácil de achar
-```
-
-Sem o filtro, achar a requisição de autenticação do alvo no meio de centenas de SDKs custa tempo e contexto.
-
-## Licença
-
-MIT — use, modifique e distribua livremente.
+[Implementação](analytics_filter.py) · [Licença MIT](LICENSE)
